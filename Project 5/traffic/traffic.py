@@ -101,7 +101,7 @@ def get_model():
         tf.keras.layers.Dense(512, activation="relu"),
         tf.keras.layers.Dense(256, activation="relu"),
 
-        tf.keras.layers.Dropout(0.5),
+        # tf.keras.layers.Dropout(0.5),
 
         tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
     ])
@@ -109,7 +109,8 @@ def get_model():
     model.compile(
         # optimizer=tf.keras.optimizers.RMSprop(),
         optimizer="adam",
-        loss="categorical_crossentropy",
+        loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+        # loss="categorical_crossentropy",
         metrics=["accuracy"]
     )
     model.summary()
