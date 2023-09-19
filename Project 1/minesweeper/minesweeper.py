@@ -123,28 +123,17 @@ class Sentence():
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        for sentence_cell in self.cells:
-            if sentence_cell == cell:
-                self.cells.remove(sentence_cell)
-                self.count -= 1
-                break
+        if cell in self.cells:
+            self.cells.remove(cell)
+            self.count -= 1
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        for sentence_cell in self.cells:
-            if sentence_cell == cell:
-                self.cells.remove(sentence_cell)
-                break
-
-
-def is_it_subset(sentence, sub_sentence):
-    """
-    Checks if a sentence is a subset of another.
-    """
-    return set(sub_sentence.cells).issubset(sentence.cells)
+        if cell in self.cells:
+            self.cells.remove(cell)
 
 
 class MinesweeperAI():
@@ -209,8 +198,11 @@ class MinesweeperAI():
         self.mark_safe(cell)
 
         # Adding the new sentence without counting known neighboring mines
-
-        self.knowledge.append(Sentence(self.get_neighbors(cell), count - self.count_of_neighboring_mines(cell)))
+        self.knowledge.append(
+            Sentence(
+                self.get_neighbors(cell),
+                count - self.count_of_neighboring_mines(cell))
+        )
 
         # Iterating through the knowledge base for finding subsets
         for i in self.knowledge:
@@ -218,7 +210,7 @@ class MinesweeperAI():
                 if (i != j
                         and len(i.cells) != 0
                         and len(j.cells) != 0
-                        and is_it_subset(i, j)):
+                        and set(i.cells).issubset(j.cells)):
 
                     n = Sentence(i.cells - j.cells, i.count - j.count)
 
@@ -236,7 +228,7 @@ class MinesweeperAI():
                 if mine not in self.mines:
                     self.mark_mine(mine)
 
-        # Removing sentences which have been used up
+        # Removing sentences which yield no more information
         for sentence in self.knowledge:
             if len(sentence.cells) == 0 or sentence.cells == set():
                 self.knowledge.remove(sentence)
@@ -248,14 +240,14 @@ class MinesweeperAI():
         neighbors = []
         for i in range(cell[0] - 1, cell[0] + 2):
             for j in range(cell[1] - 1, cell[1] + 2):
-
+                neighbor = (i, j)
                 # Ignore the cell itself
-                if (i, j) == cell:
+                if neighbor == cell:
                     continue
                 else:
-                    neighbor = (i, j)
                     if (0 <= i < self.width) and (0 <= j < self.height):
-                        if (neighbor not in self.mines and neighbor not in self.safes
+                        if (neighbor not in self.mines
+                                and neighbor not in self.safes
                                 and neighbor not in self.moves_made):
                             neighbors.append(neighbor)
 
@@ -268,11 +260,10 @@ class MinesweeperAI():
         count = 0
         for i in range(cell[0] - 1, cell[0] + 2):
             for j in range(cell[1] - 1, cell[1] + 2):
-
-                if (i, j) == cell:
+                neighbor = (i, j)
+                if neighbor == cell:
                     continue
                 else:
-                    neighbor = (i, j)
                     if neighbor in self.mines:
                         count += 1
         return count
@@ -298,6 +289,7 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
+        # Check if the game is completed
         if (self.height * self.width) - len(self.mines) == len(self.moves_made):
             return None
 

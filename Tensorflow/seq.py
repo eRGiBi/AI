@@ -1,8 +1,8 @@
 import tensorflow as tf
 import keras
 from keras import layers
-import pydot
-import graphviz
+# import pydot
+# import graphviz
 
 # Define Sequential model with 3 layers
 model = keras.Sequential(
@@ -12,11 +12,13 @@ model = keras.Sequential(
         layers.Dense(4, name="layer3"),
     ]
 )
+# print(model.weights)
+# print(len(model.weights))
 # Call model on a test input
 x = tf.ones((3, 3))
 y = model(x)
-
-
+print(model.weights)
+print(len(model.weights))
 # Create 3 layers
 layer1 = layers.Dense(2, activation="relu", name="layer1")
 layer2 = layers.Dense(3, activation="relu", name="layer2")
