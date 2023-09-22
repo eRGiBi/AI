@@ -19,3 +19,10 @@ A 3 by 3 pool size no
 mean_squared_error
  tanh
 
+With the setup of a NN with 1 Conv, 1 2D MaxPool, 3 Dense (728, 512, 256) unit, 
+using adam, BinnaryCrossentropy, I found that the model reached almost
+95% accuracy in 30 epochs and 100% in 50, but an interesting overfitting occurred,
+with exactly 0.6667 accuracy on the validation data.
+
+Increasing the dropout lessened both the training and validation accuracy.
+

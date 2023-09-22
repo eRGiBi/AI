@@ -6,7 +6,7 @@ import tensorflow as tf
 
 from sklearn.model_selection import train_test_split
 
-EPOCHS = 10
+EPOCHS = 50
 IMG_WIDTH = 30
 IMG_HEIGHT = 30
 NUM_CATEGORIES = 3
@@ -97,11 +97,11 @@ def get_model():
 
         tf.keras.layers.Flatten(),
 
-        tf.keras.layers.Dense(728, activation="relu"),
+        tf.keras.layers.Dense(228, activation="relu"),
         tf.keras.layers.Dense(512, activation="relu"),
         tf.keras.layers.Dense(256, activation="relu"),
 
-        # tf.keras.layers.Dropout(0.5),
+        tf.keras.layers.Dropout(0.5),
 
         tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
     ])
