@@ -4,6 +4,7 @@ from tensorflow import keras
 from keras import layers
 import numpy as np
 
+import matplotlib.pyplot as plt
 
 # train_ds, validation_ds, test_ds = tfds.load(
 #     "cats_vs_dogs",
@@ -35,7 +36,6 @@ print("Number of training samples:", num_train_samples)
 print("Number of validation samples:", num_validation_samples)
 print("Number of test samples:", num_test_samples)
 
-import matplotlib.pyplot as plt
 
 images_and_labels = [(image, label) for image, label in train_ds.take(9)]
 
