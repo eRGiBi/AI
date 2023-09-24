@@ -1,8 +1,7 @@
 import os
 import tensorflow as tf
 import keras
-from keras import layers
-from train import get_compiled_model
+from CustomTrainWithCallbacks import get_compiled_model
 
 # Prepare a directory to store all the checkpoints.
 checkpoint_dir = "./ckpt"
