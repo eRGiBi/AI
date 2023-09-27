@@ -26,3 +26,5 @@ with exactly 0.6667 accuracy on the validation data.
 
 Increasing the dropout lessened both the training and validation accuracy.
 
+More LAYERS
+

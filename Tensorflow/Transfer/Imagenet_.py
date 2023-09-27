@@ -1,10 +1,11 @@
-import tensorflow_datasets as tfds
-import tensorflow as tf
-from tensorflow import keras
-from keras import layers
 import numpy as np
+import tensorflow as tf
+import keras
+import tensorflow_datasets as tfds
 
 import matplotlib.pyplot as plt
+
+
 
 # train_ds, validation_ds, test_ds = tfds.load(
 #     "cats_vs_dogs",
@@ -68,8 +69,8 @@ with strategy.scope():
 
     data_augmentation = keras.Sequential(
         [
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(0.1),
+            tf.keras.layers.RandomFlip("horizontal"),
+            tf.keras.layers.RandomRotation(0.1),
         ]
     )
     for images, labels in train_ds.take(1):

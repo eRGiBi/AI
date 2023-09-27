@@ -76,9 +76,12 @@ def load_data(data_dir):
 
             images.append(img)
             labels.append(sub_folder)
+    # ds = tf.data.Dataset.from_tensor_slices(np.array(images),np.array(labels))
+    # ds = ds.shuffle(buffer_size=len(images))
 
     # print(images)
     # print(labels)
+    # return (ds)
     return (images, labels)
 
 
@@ -95,11 +98,21 @@ def get_model():
         ),
         tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
 
+        tf.keras.layers.Conv2D(
+            32, (3, 3), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
+        ),
+        tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
+        tf.keras.layers.Conv2D(
+            32, (3, 3), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
+        ),
+        tf.keras.layers.MaxPool2D(pool_size=(4, 4)),
+
         tf.keras.layers.Flatten(),
 
-        tf.keras.layers.Dense(228, activation="relu"),
-        tf.keras.layers.Dense(512, activation="relu"),
+        tf.keras.layers.Dense(526, activation="relu"),
         tf.keras.layers.Dense(256, activation="relu"),
+        tf.keras.layers.Dense(266, activation="relu"),
+        tf.keras.layers.Dense(128, activation="relu"),
 
         tf.keras.layers.Dropout(0.5),
 

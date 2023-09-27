@@ -5,3 +5,6 @@ Project 5/traffic/gtsrb
 Project 5/traffic/gtsrb-small
 Tensorflow\__pycache__\train.cpython-311.pyc
 Project 1\minesweeper\minesweeper.py
+env
+.vs
+.idea
