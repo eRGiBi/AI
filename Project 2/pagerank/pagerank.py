@@ -59,7 +59,6 @@ def transition_model(corpus, page, damping_factor):
     """
     distribution = dict()
     num_of_pages = len(corpus)
-    num_of_linked = len(corpus[page])
 
     # No outgoing links
     if len(corpus[page]) == 0:
@@ -67,11 +66,10 @@ def transition_model(corpus, page, damping_factor):
             distribution[p] = 1 / num_of_pages
     else:
         chance_for_all = (1 - damping_factor) / num_of_pages
-        chance_for_linked = damping_factor / num_of_linked
+        chance_for_linked = damping_factor / len(corpus[page])
 
-        linked_pages = corpus[page]
         for site in corpus:
-            if site in linked_pages:
+            if site in corpus[page]:
                 distribution[site] = chance_for_linked + chance_for_all
             else:
                 distribution[site] = chance_for_all
@@ -123,14 +121,13 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-
     def PR(page, distribution):
 
         random_vis = (1 - damping_factor) / len(local_corpus)
         linked_vis = 0
 
         for link in local_corpus:
-            if local_corpus[link].__contains__(page):
+            if page in local_corpus[link]:
                 linked_vis += distribution[link] / len(local_corpus[link])
 
         return random_vis + (linked_vis * damping_factor)
@@ -151,11 +148,11 @@ def iterate_pagerank(corpus, damping_factor):
             distribution[page] = PR(page, distribution)
 
         # Utilizing numpy's high precision subtract method for threshold
-        d = np.subtract(
+        changes = np.subtract(
             [old_distribution[page] for page in old_distribution], [distribution[page] for page in distribution]
         )
 
-        if max(abs(diff) for diff in d) < 0.001:
+        if max(abs(diff) for diff in changes) < 0.001:
             break
 
         old_distribution = distribution.copy()

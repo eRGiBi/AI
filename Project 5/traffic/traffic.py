@@ -1,3 +1,5 @@
+import random
+
 import cv2
 import numpy as np
 import os
@@ -70,7 +72,6 @@ def load_data(data_dir):
         # images = os.listdir(path)
 
         for image_file in os.listdir(s_path):
-
             img = cv2.imread(os.path.join(s_path, image_file))
             img.resize((IMG_WIDTH, IMG_HEIGHT, 3))
 
@@ -114,10 +115,13 @@ def get_model():
         tf.keras.layers.Dense(266, activation="relu"),
         tf.keras.layers.Dense(128, activation="relu"),
 
-        tf.keras.layers.Dropout(0.5),
-
-        tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
     ])
+    for i in range(50):
+        model.add(tf.keras.layers.Dense(random.randint(500, 2000), activation="relu"))
+
+    model.add(tf.keras.layers.Dropout(0.5),)
+
+    model.add(tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax"))
 
     model.compile(
         # optimizer=tf.keras.optimizers.RMSprop(),

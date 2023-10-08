@@ -127,63 +127,65 @@ def powerset(s):
 
 def joint_probability(people, one_gene, two_genes, have_trait):
 
-    def probability_on_gene_type(x, l):
-        p = 1
-        for person in l:
-            p *= PROBS["gene"][x]
-            if person in have_trait:
-                p *= PROBS["trait"][x][True]
-            else:
-                p *= PROBS["trait"][x][False]
-        return p
+    
 
-    zero_gene = []
-    for person in people:
-        if person not in one_gene and person not in two_genes:
-            zero_gene.append(person)
-    # c0 = probability_on_gene_type(0, zero_gene)
-    ch = 1
-    for person in people:
-        if person in one_gene:
-            num = 1
-        elif person in two_genes:
-            num = 2
-        else:
-            num = 0
-
-        mother = people[person]["mother"]
-        father = people[person]["father"]
-        mother_chance = 1
-        father_chance = 1
-
-        if mother is None:
-            mother_chance *= PROBS["gene"][num]
-            father_chance *= 1 - PROBS["gene"][num]
-        elif mother in zero_gene:
-            father_chance *= 1 - PROBS["mutation"]
-            mother_chance *= PROBS["mutation"]
-        elif mother in two_genes:
-            father_chance *= PROBS["mutation"]
-            mother_chance *= 1 - PROBS["mutation"]
-
-        if father is None:
-            father_chance *= PROBS["gene"][num]
-            mother_chance *= 1 - PROBS["gene"][num]
-        elif father in zero_gene:
-            father_chance *= PROBS["mutation"]
-            mother_chance *= 1 - PROBS["mutation"]
-        elif father in two_genes:
-            father_chance *= 1 - PROBS["mutation"]
-            mother_chance *= PROBS["mutation"]
-
-        if father in one_gene or mother in one_gene:
-            father_chance *= 0.5
-            mother_chance *= 0.5
-
-        ch *= PROBS["trait"][num][person in have_trait] * (father_chance + mother_chance)
-
-    print(ch )
-    return ch
+    # def probability_on_gene_type(x, l):
+    #     p = 1
+    #     for person in l:
+    #         p *= PROBS["gene"][x]
+    #         if person in have_trait:
+    #             p *= PROBS["trait"][x][True]
+    #         else:
+    #             p *= PROBS["trait"][x][False]
+    #     return p
+    #
+    # zero_gene = []
+    # for person in people:
+    #     if person not in one_gene and person not in two_genes:
+    #         zero_gene.append(person)
+    # # c0 = probability_on_gene_type(0, zero_gene)
+    # ch = 1
+    # for person in people:
+    #     if person in one_gene:
+    #         num = 1
+    #     elif person in two_genes:
+    #         num = 2
+    #     else:
+    #         num = 0
+    #
+    #     mother = people[person]["mother"]
+    #     father = people[person]["father"]
+    #     mother_chance = 1
+    #     father_chance = 1
+    #
+    #     if mother is None:
+    #         mother_chance *= PROBS["gene"][num]
+    #         father_chance *= 1 - PROBS["gene"][num]
+    #     elif mother in zero_gene:
+    #         father_chance *= 1 - PROBS["mutation"]
+    #         mother_chance *= PROBS["mutation"]
+    #     elif mother in two_genes:
+    #         father_chance *= PROBS["mutation"]
+    #         mother_chance *= 1 - PROBS["mutation"]
+    #
+    #     if father is None:
+    #         father_chance *= PROBS["gene"][num]
+    #         mother_chance *= 1 - PROBS["gene"][num]
+    #     elif father in zero_gene:
+    #         father_chance *= PROBS["mutation"]
+    #         mother_chance *= 1 - PROBS["mutation"]
+    #     elif father in two_genes:
+    #         father_chance *= 1 - PROBS["mutation"]
+    #         mother_chance *= PROBS["mutation"]
+    #
+    #     if father in one_gene or mother in one_gene:
+    #         father_chance *= 0.5
+    #         mother_chance *= 0.5
+    #
+    #     ch *= PROBS["trait"][num][person in have_trait] * (father_chance + mother_chance)
+    #
+    # print(ch )
+    # return ch
 
 
 def joint_probability2(people, one_gene, two_genes, have_trait):
