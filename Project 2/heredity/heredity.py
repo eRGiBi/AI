@@ -129,6 +129,8 @@ def joint_probability(people, one_gene, two_genes, have_trait):
 
     
 
+    
+
     # def probability_on_gene_type(x, l):
     #     p = 1
     #     for person in l:
@@ -188,117 +190,117 @@ def joint_probability(people, one_gene, two_genes, have_trait):
     # return ch
 
 
-def joint_probability2(people, one_gene, two_genes, have_trait):
-    """
-    Compute and return a joint probability.
-
-    The probability returned should be the probability that
-        * everyone in set `one_gene` has one copy of the gene, and
-        * everyone in set `two_genes` has two copies of the gene, and
-        * everyone not in `one_gene` or `two_gene` does not have the gene, and
-        * everyone in set `have_trait` has the trait, and
-        * everyone not in set` have_trait` does not have the trait.
-    """
-
-    def probability_on_gene_type(x, lst):
-        chance = 1
-        for person in lst:
-            if people[person]["mother"] is None and people[person]["father"] is None:
-                chance *= PROBS["gene"][x]
-                chance *= PROBS["trait"][x][person in have_trait]
-            # TODO different parents?
-            else:
-                chance *= PROBS["gene"][x]
-                chance *= PROBS["trait"][x][person in have_trait]
-                chance *= get_parent_probability(person, x)
-        return chance
-
-    def get_parent_probability2(person, x):
-
-        mother = people[person]["mother"]
-        father = people[person]["father"]
-        mother_chance = 1
-        father_chance = 1
-
-        if mother is None:
-            mother_chance *= PROBS["gene"][x]
-            father_chance *= 1 - PROBS["gene"][x]
-        elif mother in zero_gene:
-            father_chance *= 1 - PROBS["mutation"]
-            mother_chance *= PROBS["mutation"]
-        elif mother in two_genes:
-            father_chance *= PROBS["mutation"]
-            mother_chance *= 1 - PROBS["mutation"]
-
-        if father is None:
-            father_chance *= PROBS["gene"][x]
-            mother_chance *= 1 - PROBS["gene"][x]
-        elif father in zero_gene:
-            father_chance *= PROBS["mutation"]
-            mother_chance *= 1 - PROBS["mutation"]
-        elif father in two_genes:
-            father_chance *= 1 - PROBS["mutation"]
-            mother_chance *= PROBS["mutation"]
-
-        if father in one_gene or mother in one_gene:
-            father_chance *= 0.5
-            mother_chance *= 0.5
-
-        return father_chance + mother_chance
-
-    # print(people)
-    print(one_gene)
-    print(two_genes)
-    print(have_trait)
-
-    zero_gene = []
-    for person in people:
-        if person not in one_gene and person not in two_genes:
-            zero_gene.append(person)
-
-    # # Zero gene --------------------------------------------------
-    # zero_gene = []
-    # for person in people:
-    #     if person not in one_gene and person not in two_genes:
-    #         zero_gene.append(person)
-    # # print(zero_gene)
-    #
-    # p_0 = probability_on_gene_type(0, zero_gene)
-    # # print(p_0)
-    #
-    # # One gene ---------------------------------------------
-    # p_1 = 1
-    # for person in one_gene:
-    #     p_1 *= PROBS["trait"][1][person in have_trait] * (get_parent_probability(person, 1))
-    #
-    # # Two gene -----------------------------------------------------
-    # p_2 = probability_on_gene_type(2, two_genes)
-    # print(p_0, p_2, p_1)
-    # print(p_1 * p_2 * p_0)
-    # return p_1 * p_2 * p_0
-
-    final_prob = 1
-    p_1 = 1
-    p_2 = 1
-    p_0 = 1
-    for person in people:
-        p_1 = 1
-        p_2 = 1
-        p_0 = 1
-
-        if person in one_gene:
-            p_1 = PROBS["trait"][1][person in have_trait] * get_parent_probability(person, 1)
-            p_1 *= PROBS["gene"][1]
-        elif person in two_genes:
-            p_2 = PROBS["trait"][2][person in have_trait] * get_parent_probability(person, 2)
-            p_2 *= PROBS["gene"][2]
-        else:
-            p_0 = PROBS["trait"][0][person in have_trait] * get_parent_probability(person, 0)
-            p_0 *= PROBS["gene"][0]
-        final_prob *= p_1 * p_2 * p_0
-
-    print(final_prob)
-    return final_prob
+# def joint_probability2(people, one_gene, two_genes, have_trait):
+#     """
+#     Compute and return a joint probability.
+#
+#     The probability returned should be the probability that
+#         * everyone in set `one_gene` has one copy of the gene, and
+#         * everyone in set `two_genes` has two copies of the gene, and
+#         * everyone not in `one_gene` or `two_gene` does not have the gene, and
+#         * everyone in set `have_trait` has the trait, and
+#         * everyone not in set` have_trait` does not have the trait.
+#     """
+#
+#     def probability_on_gene_type(x, lst):
+#         chance = 1
+#         for person in lst:
+#             if people[person]["mother"] is None and people[person]["father"] is None:
+#                 chance *= PROBS["gene"][x]
+#                 chance *= PROBS["trait"][x][person in have_trait]
+#             # TODO different parents?
+#             else:
+#                 chance *= PROBS["gene"][x]
+#                 chance *= PROBS["trait"][x][person in have_trait]
+#                 chance *= get_parent_probability(person, x)
+#         return chance
+#
+#     def get_parent_probability2(person, x):
+#
+#         mother = people[person]["mother"]
+#         father = people[person]["father"]
+#         mother_chance = 1
+#         father_chance = 1
+#
+#         if mother is None:
+#             mother_chance *= PROBS["gene"][x]
+#             father_chance *= 1 - PROBS["gene"][x]
+#         elif mother in zero_gene:
+#             father_chance *= 1 - PROBS["mutation"]
+#             mother_chance *= PROBS["mutation"]
+#         elif mother in two_genes:
+#             father_chance *= PROBS["mutation"]
+#             mother_chance *= 1 - PROBS["mutation"]
+#
+#         if father is None:
+#             father_chance *= PROBS["gene"][x]
+#             mother_chance *= 1 - PROBS["gene"][x]
+#         elif father in zero_gene:
+#             father_chance *= PROBS["mutation"]
+#             mother_chance *= 1 - PROBS["mutation"]
+#         elif father in two_genes:
+#             father_chance *= 1 - PROBS["mutation"]
+#             mother_chance *= PROBS["mutation"]
+#
+#         if father in one_gene or mother in one_gene:
+#             father_chance *= 0.5
+#             mother_chance *= 0.5
+#
+#         return father_chance + mother_chance
+#
+#     # print(people)
+#     print(one_gene)
+#     print(two_genes)
+#     print(have_trait)
+#
+#     zero_gene = []
+#     for person in people:
+#         if person not in one_gene and person not in two_genes:
+#             zero_gene.append(person)
+#
+#     # # Zero gene --------------------------------------------------
+#     # zero_gene = []
+#     # for person in people:
+#     #     if person not in one_gene and person not in two_genes:
+#     #         zero_gene.append(person)
+#     # # print(zero_gene)
+#     #
+#     # p_0 = probability_on_gene_type(0, zero_gene)
+#     # # print(p_0)
+#     #
+#     # # One gene ---------------------------------------------
+#     # p_1 = 1
+#     # for person in one_gene:
+#     #     p_1 *= PROBS["trait"][1][person in have_trait] * (get_parent_probability(person, 1))
+#     #
+#     # # Two gene -----------------------------------------------------
+#     # p_2 = probability_on_gene_type(2, two_genes)
+#     # print(p_0, p_2, p_1)
+#     # print(p_1 * p_2 * p_0)
+#     # return p_1 * p_2 * p_0
+#
+#     final_prob = 1
+#     p_1 = 1
+#     p_2 = 1
+#     p_0 = 1
+#     for person in people:
+#         p_1 = 1
+#         p_2 = 1
+#         p_0 = 1
+#
+#         if person in one_gene:
+#             p_1 = PROBS["trait"][1][person in have_trait] * get_parent_probability(person, 1)
+#             p_1 *= PROBS["gene"][1]
+#         elif person in two_genes:
+#             p_2 = PROBS["trait"][2][person in have_trait] * get_parent_probability(person, 2)
+#             p_2 *= PROBS["gene"][2]
+#         else:
+#             p_0 = PROBS["trait"][0][person in have_trait] * get_parent_probability(person, 0)
+#             p_0 *= PROBS["gene"][0]
+#         final_prob *= p_1 * p_2 * p_0
+#
+#     print(final_prob)
+#     return final_prob
 
 
 def update(probabilities, one_gene, two_genes, have_trait, p):

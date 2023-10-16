@@ -66,23 +66,13 @@ def load_data(data_dir):
 
         s_path = os.path.join(data_dir, sub_folder)
 
-        # print(s_path)
-
-        # images = filter(lambda filename: filename.lower().endswith(('.pmm')), os.listdir(subfolder_path))
-        # images = os.listdir(path)
-
         for image_file in os.listdir(s_path):
             img = cv2.imread(os.path.join(s_path, image_file))
             img.resize((IMG_WIDTH, IMG_HEIGHT, 3))
 
             images.append(img)
             labels.append(sub_folder)
-    # ds = tf.data.Dataset.from_tensor_slices(np.array(images),np.array(labels))
-    # ds = ds.shuffle(buffer_size=len(images))
 
-    # print(images)
-    # print(labels)
-    # return (ds)
     return (images, labels)
 
 
@@ -99,35 +89,27 @@ def get_model():
         ),
         tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
 
-        tf.keras.layers.Conv2D(
-            32, (3, 3), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
-        ),
-        tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
-        tf.keras.layers.Conv2D(
-            32, (3, 3), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
-        ),
-        tf.keras.layers.MaxPool2D(pool_size=(4, 4)),
+        # tf.keras.layers.Conv2D(
+        #     32, (3, 3), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
+        # ),
+        # tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
 
         tf.keras.layers.Flatten(),
 
-        tf.keras.layers.Dense(526, activation="relu"),
+        tf.keras.layers.Dense(512, activation="relu"),
         tf.keras.layers.Dense(256, activation="relu"),
-        tf.keras.layers.Dense(266, activation="relu"),
-        tf.keras.layers.Dense(128, activation="relu"),
 
     ])
-    for i in range(50):
-        model.add(tf.keras.layers.Dense(random.randint(500, 2000), activation="relu"))
 
-    model.add(tf.keras.layers.Dropout(0.5),)
+    model.add(tf.keras.layers.Dropout(0.5)),
 
     model.add(tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax"))
 
     model.compile(
         # optimizer=tf.keras.optimizers.RMSprop(),
         optimizer="adam",
-        loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-        # loss="categorical_crossentropy",
+        # loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+        loss="categorical_crossentropy",
         metrics=["accuracy"]
     )
     model.summary()
