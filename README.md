@@ -1,1 +1,1 @@
-AI  practice
+University of Harvard AI Course Solutions
